@@ -75,6 +75,7 @@ public class SercurityConfig {
         return httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/accounts/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and().build();

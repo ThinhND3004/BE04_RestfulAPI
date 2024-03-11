@@ -1,8 +1,11 @@
 package com.example.BE04.controllers;
 
+import com.example.BE04.entity.UserEntity;
 import com.example.BE04.payload.response.BaseResponse;
 import com.example.BE04.payload.response.TokenResponse;
+import com.example.BE04.service.Imp.CreateAccountServiceImp;
 import com.example.BE04.service.Imp.LoginServiceImp;
+import com.example.BE04.test.LoginTest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Encoders;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,21 +18,20 @@ import javax.crypto.SecretKey;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin
 public class LoginController {
 
     @Autowired
     private LoginServiceImp loginServiceImp;
+
+
     @PostMapping("/login-with-username-and-password")
-    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password)
+    public ResponseEntity<?> login(@RequestBody LoginTest user)
     {
-//        SecretKey secretKey = Jwts.SIG.HS256.key().build();
-//        String secretString = Encoders.BASE64.encode(secretKey.getEncoded());
-//        System.out.println("Kiểm tra: " + secretString);
 
         BaseResponse baseResponse = new BaseResponse();
 
-        String token = loginServiceImp.checkLogin(username, password);
+        String token = loginServiceImp.checkLogin(user.getUsername(), user.getPassword());
 
         baseResponse.setAccessToken(token);
 
@@ -46,4 +48,6 @@ public class LoginController {
 
         return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
+
+
 }
